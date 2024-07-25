@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -8,13 +9,15 @@ const leadRoutes = require("./routes/lead");
 
 const app = express();
 
-const PORT = 5000;
+const port = process.env.PORT;
+const dbUrl = process.env.DB_URL;
+const clientUrl = process.env.CLIENT_URL;
 
 app.use(express.json());
 
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3000", "*", clientUrl],
     credentials: true,
     allowedHeaders: [
       "set-cookie",
@@ -26,9 +29,7 @@ app.use(
 );
 
 mongoose
-  .connect(
-    "mongodb+srv://alba:j29jWiT3m78FcJ35@cluster0.4ilcphx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-  )
+  .connect(dbUrl)
   .then(() => {
     console.log("Database connected");
   })
@@ -40,6 +41,6 @@ app.use("/api/admin", authRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/leads", leadRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(port, () => {
+  console.log(`Server is running on PORT: ${port}`);
 });

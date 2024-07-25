@@ -1,5 +1,4 @@
 const PropertyCard = require("../models/PropertyCard");
-const Lead = require("../models/Lead");
 
 const createPropertyCard = async (req, res) => {
   try {
